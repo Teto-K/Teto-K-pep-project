@@ -110,7 +110,6 @@ public class SocialMediaController {
         } else {
             ctx.status(400);
         }
-
     }
     
     private void getAllMessagesByIdHandler(Context ctx) {
