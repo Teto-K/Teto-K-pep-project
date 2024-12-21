@@ -16,8 +16,12 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
-    public Message createMessage(Message Message) {
-        return messageDAO.createMessage(Message);
+    public Message createMessage(Message message) {
+        String txt = message.getMessage_text();
+        if(txt != "" && txt != null && txt.length() <= 255) {
+            return messageDAO.createMessage(message);
+        } 
+        return null;
     }
 
     public List<Message> getAllMessages() {
@@ -29,16 +33,21 @@ public class MessageService {
     }
 
     public Message deleteMessage(int id) {
-        return messageDAO.deleteMessage(id);
+        if(messageDAO.getAMessage(id) != null) {
+            Message deletedMessage = messageDAO.getAMessage(id);
+            messageDAO.deleteMessage(id);
+            return deletedMessage;
+        }
+        return null;
     }
 
     public Message updateMessage(int id, Message message) {
-        if(messageDAO.getAllMessagesById(id) == null) {
-            return null;
-        } else {
+        String txt = message.getMessage_text();
+        if(messageDAO.getAMessage(id) != null && txt != "" && txt != null && txt.length() <= 255) {
             messageDAO.updateMessage(id, message);
             return messageDAO.getAMessage(id);
-        }
+        } 
+        return null;
     }
 
     public List<Message> getAllMessagesById(int accId) {

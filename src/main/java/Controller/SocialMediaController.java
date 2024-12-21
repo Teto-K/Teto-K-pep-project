@@ -80,26 +80,42 @@ public class SocialMediaController {
         }
     }
     
-    private void getAllMessagesHandler {
-        
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
     }
     
-    private void getAMessageHandler {
-        
+    private void getAMessageHandler(Context ctx){
+        Message message = messageService.deleteMessage(Integer.parseInt(ctx.pathParam("message_id")));
+        if(message != null) {
+            ctx.json(message);
+        }
     }
     
-    private void deleteMessageHandler {
-        
+    private void deleteMessageHandler(Context ctx) {
+        Message message = messageService.getAMessage(Integer.parseInt(ctx.pathParam("message_id")));
+        if(message != null) {
+            ctx.json(message);
+        }
     }
     
-    private void patchMessageHandler {
-        
-    }
-    
-    private void getAllMessagesByIdHandler {
-        
-    }
+    private void patchMessageHandler(Context ctx) throws JsonProcessingException  {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message updMessage = messageService.updateMessage(message_id, message);
+        System.out.println(updMessage);
+        if(updMessage != null) {
+            ctx.json(mapper.writeValueAsString(updMessage));
+        } else {
+            ctx.status(400);
+        }
 
-
+    }
+    
+    private void getAllMessagesByIdHandler(Context ctx) {
+        List<Message> message = messageService.getAllMessagesById(Integer.parseInt(ctx.pathParam("account_id")));
+        ctx.json(message);
+    }
 
 }

@@ -15,11 +15,19 @@ public class AccountService {
     }
 
     public Account createAccount(Account account){
-        return accountDAO.createAccount(account);
+        if(account.getUsername() != "" && account.getUsername() != null && account.getPassword().length() >= 4) {
+            return accountDAO.createAccount(account);
+        } else {
+            return null;
+        }
     }
 
     public Account verifyLogin(Account account) {
-        return accountDAO.verifyLogin(account);
+        if(accountDAO.verifyLogin(account) != null) {
+            return accountDAO.verifyLogin(account);
+        } else {
+            return null;
+        }
     }
     
 }
